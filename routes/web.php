@@ -3,18 +3,28 @@
 use App\Http\Controllers\JobController;
 use App\Http\Controllers\RegisteredUserController;
 use App\Http\Controllers\SessionController;
+use App\Jobs\TranslateJob;
 use App\Mail\JobPosted;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Route;
 use App\Models\Job;
+use Illuminate\Log\Logger;
 use Illuminate\Support\Facades\Mail;
 
 Route::get('test', function(){
-    return new JobPosted(Job::firstOrFail());
+    //return new JobPosted(Job::firstOrFail());
 
     //Mail::to('pokatchoneng@gmail.com')->send(new JobPosted(Job::firstOrFail()));
     
-    //return 'Done!';
+    //dispatch(function(){
+        //Logger('Hello from queue');
+    //})->delay(5);
+
+    $job = Job::firstOrFail();
+
+    TranslateJob::dispatch($job);
+
+    return 'Done!';
 
 });
 
